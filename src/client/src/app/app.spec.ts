@@ -52,6 +52,24 @@ describe('Authentication UI', () => {
     expect(fixture.componentInstance.form.valid).toBe(true);
   });
 
+  it('shows production copy and reveals username rules only after invalid input', () => {
+    const loginFixture = TestBed.createComponent(LoginComponent);
+    loginFixture.detectChanges();
+    expect(loginFixture.nativeElement.textContent).not.toContain('Need an account?');
+
+    const registerFixture = TestBed.createComponent(RegisterComponent);
+    registerFixture.detectChanges();
+    expect(registerFixture.nativeElement.textContent).not.toContain(
+      '3–50 letters, numbers, dots, dashes or underscores',
+    );
+    registerFixture.componentInstance.form.controls.username.setValue('invalid username');
+    registerFixture.componentInstance.form.controls.username.markAsTouched();
+    registerFixture.detectChanges();
+    expect(registerFixture.nativeElement.textContent).toContain(
+      'Use 3–50 letters, numbers, dots, dashes or underscores.',
+    );
+  });
+
   it('stores the JWT returned by login', () => {
     const service = TestBed.inject(AuthService);
     service.login({ username: 'tester', password: 'StrongPass1' }).subscribe();

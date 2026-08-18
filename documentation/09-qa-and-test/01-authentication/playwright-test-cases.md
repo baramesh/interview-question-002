@@ -36,11 +36,11 @@ type: playwright-test-case
 
 ## Content
 
-### TC-AUTH2-CONTENT-001 — ไม่แสดงรหัสข้อสอบ ศัพท์ภายใน หรือรายการนโยบาย Password ค้างไว้
+### TC-AUTH2-CONTENT-001 — ไม่แสดงรหัสข้อสอบ ศัพท์ภายใน หรือคำอธิบายที่ไม่จำเป็นค้างไว้
 
 - เงื่อนไขก่อนทดสอบ: เปิด Login และมีบัญชีสำหรับเข้า Welcome
-- Test Step: 1) ตรวจข้อความทั้งหมดบน Login 2) เปิด Register และตรวจข้อความทั้งหมด รวมถึงรายการกฎ Password แบบค้างไว้ 3) เข้าสู่ระบบ เปิด Welcome และตรวจข้อความทั้งหมด 4) ตรวจผลลัพธ์ชื่อผู้ใช้ตามโจทย์
-- ผลที่คาดหวัง: ทั้งสามหน้าไม่แสดง `IT 02-x`, `Interview Question 002`, `Account access` หรือ `JWT`; Register ไม่แสดง `At least 8 characters`, `Up to 128 characters` และ `Spaces and symbols are allowed` แบบค้างไว้; Welcome ยังแสดง `Welcome User: xxx`
+- Test Step: 1) ตรวจข้อความทั้งหมดบน Login รวมถึงคำอธิบาย Create account ซ้ำ 2) เปิด Register และตรวจข้อความทั้งหมด รวมถึงรายการกฎ Password และ Username แบบค้างไว้ 3) เข้าสู่ระบบ เปิด Welcome และตรวจข้อความทั้งหมด 4) ตรวจผลลัพธ์ชื่อผู้ใช้ตามโจทย์
+- ผลที่คาดหวัง: ทั้งสามหน้าไม่แสดง `IT 02-x`, `Interview Question 002`, `Account access` หรือ `JWT`; Login ไม่แสดงคำอธิบาย Create account ซ้ำ; Register ไม่แสดงกฎ Password หรือ Username แบบค้างไว้; Welcome ยังแสดง `Welcome User: xxx`
 
 ## Validation
 
@@ -69,6 +69,11 @@ type: playwright-test-case
 
 - Test Step: ส่ง `POST /api/auth/register` ด้วย Username สั้นเกิน รหัสผ่านไม่ผ่านกฎ และ Confirm password ไม่ตรงกัน
 - ผลที่คาดหวัง: API ตอบ `400` แบบ Problem Details โดยมี `title`, `status = 400` และ `errors`
+
+### TC-AUTH2-VAL-006 — แสดงกฎ Username เฉพาะเมื่อกรอกผิดรูปแบบ
+
+- Test Step: 1) เปิด `/register` 2) กรอก Username ที่มีช่องว่าง 3) กรอก Password และ Confirm password ถูกต้อง 4) กด Create account 5) ตรวจข้อความและจำนวนคำขอ API
+- ผลที่คาดหวัง: แสดง `Use 3–50 letters, numbers, dots, dashes or underscores.` ใกล้ช่อง Username และไม่เรียก `/api/auth/register`
 
 ## Security
 

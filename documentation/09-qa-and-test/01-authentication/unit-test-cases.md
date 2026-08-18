@@ -23,3 +23,4 @@ type: unit-test-case
 | UI         | UT-UI-AUTH2-003  | login เก็บ token และนำทาง                                                  |
 | UI         | UT-UI-AUTH2-004  | unauthorized ล้าง token กลับ login และส่งข้อความให้เข้าใหม่                |
 | UI         | UT-UI-AUTH2-005  | register ยอมรับ passphrase โดยไม่บังคับองค์ประกอบ                          |
+| UI         | UT-UI-AUTH2-006  | แสดงข้อความ production และกฎ Username เฉพาะหลังกรอกผิดรูปแบบ               |

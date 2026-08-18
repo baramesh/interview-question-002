@@ -13,6 +13,8 @@ type: ui-specification
 - IT 02-3 มีหัวข้อ Welcome, ข้อความ `Welcome User: {username}` จาก API และปุ่ม Sign out
 - UI production ไม่แสดงรหัสหน้าจอ `IT 02-x`, ชื่อข้อสอบ `Interview Question 002`, ป้าย `Account access` หรือศัพท์ implementation เช่น JWT, hash, signature, issuer, audience และ lifetime แก่ผู้ใช้ รหัสเหล่านี้ใช้เฉพาะในเอกสารและชุดทดสอบ
 - หน้า Register ไม่แสดงรายการนโยบาย Password ค้างไว้ เพราะเป็นรายละเอียดภายในที่รบกวนงานหลัก; แสดงข้อความช่วยแก้ไขใต้ช่องเฉพาะเมื่อค่าที่กรอกไม่ผ่านกฎ
+- หน้า Login แสดงทางไป Register เพียงตำแหน่งเดียว ไม่แสดงคำอธิบาย Create account ซ้ำในแผงตกแต่ง
+- หน้า Register ไม่แสดงกฎรูปแบบ Username ค้างไว้; ช่องว่างแสดง `Username is required.` และค่าผิดรูปแบบแสดง `Use 3–50 letters, numbers, dots, dashes or underscores.` หลังตรวจไม่ผ่านเท่านั้น
 - เมื่อ session ใช้งานไม่ได้ ให้ลบ token กลับหน้า Login และแสดง `Your session has expired. Please sign in again.` โดยไม่ระบุศัพท์ทางเทคนิค
 - ฟิลด์บังคับใช้ดอกจันและคำชี้แจงเดียวกัน
 - Password ใช้ Material input และปุ่มแสดง/ซ่อนที่ใช้ด้วย keyboard ได้

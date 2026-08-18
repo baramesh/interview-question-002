@@ -33,17 +33,11 @@ export const sharedStyles = `
     class="auth-shell grid w-full max-w-4xl overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-2xl md:grid-cols-[1.05fr_1fr]"
     data-testid="login-page"
   >
-    <aside class="auth-aside hidden p-10 text-white md:flex md:flex-col md:justify-between">
+    <aside class="auth-aside hidden p-10 text-white md:flex md:flex-col">
       <div>
         <h1 class="m-0 text-4xl font-semibold tracking-tight">Welcome back</h1>
         <p class="mt-4 max-w-sm text-sm leading-6 text-indigo-100">
           Sign in to continue to your Example.com account.
-        </p>
-      </div>
-      <div class="rounded-2xl border border-white/15 bg-white/10 p-4">
-        <p class="m-0 text-sm font-semibold">Need an account?</p>
-        <p class="mb-0 mt-2 text-xs leading-5 text-indigo-100">
-          Select Create account to register a username and password.
         </p>
       </div>
     </aside>

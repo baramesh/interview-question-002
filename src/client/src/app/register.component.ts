@@ -73,9 +73,9 @@ function passwordsMatch(control: AbstractControl): ValidationErrors | null {
             autocomplete="username"
             formControlName="username"
             data-testid="register-username"
-          /><mat-hint>3–50 letters, numbers, dots, dashes or underscores</mat-hint>
+          />
           @if (showError('username')) {
-            <mat-error>Enter a valid username.</mat-error>
+            <mat-error>{{ usernameErrorMessage() }}</mat-error>
           }
         </mat-form-field>
         <mat-form-field appearance="outline"
@@ -171,6 +171,13 @@ export class RegisterComponent {
     const control = this.form.controls[name];
     return control.invalid && control.touched;
   }
+
+  usernameErrorMessage(): string {
+    const control = this.form.controls.username;
+    if (control.hasError('required')) return 'Username is required.';
+    return 'Use 3–50 letters, numbers, dots, dashes or underscores.';
+  }
+
   submit(): void {
     this.error.set(null);
     if (this.form.invalid || this.busy()) {

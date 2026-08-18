@@ -81,7 +81,7 @@ test('TC-AUTH2-E2E-004 ออกจากระบบและลบ token', asy
   expect(await page.evaluate(() => sessionStorage.getItem('example.q002.accessToken'))).toBeNull();
 });
 
-test('TC-AUTH2-CONTENT-001 ไม่แสดงรหัสข้อสอบ ศัพท์ภายใน หรือรายการนโยบาย Password ค้างไว้', async ({
+test('TC-AUTH2-CONTENT-001 ไม่แสดงรหัสข้อสอบ ศัพท์ภายใน หรือคำอธิบายที่ไม่จำเป็นค้างไว้', async ({
   page,
   request,
 }) => {
@@ -93,6 +93,9 @@ test('TC-AUTH2-CONTENT-001 ไม่แสดงรหัสข้อสอบ �
     'At least 8 characters',
     'Up to 128 characters',
     'Spaces and symbols are allowed',
+    'Need an account?',
+    'Select Create account to register a username and password.',
+    '3–50 letters, numbers, dots, dashes or underscores',
   ];
   const assertProductionCopy = async (): Promise<void> => {
     const visibleText = await page.locator('body').innerText();
@@ -187,6 +190,25 @@ test('TC-AUTH2-VAL-005 API สมัครสมาชิกตอบ Problem De
   expect(body.title).toBe('One or more validation errors occurred.');
   expect(body.status).toBe(400);
   expect(Object.keys(body.errors).length).toBeGreaterThan(0);
+});
+
+test('TC-AUTH2-VAL-006 แสดงกฎ Username เฉพาะเมื่อกรอกผิดรูปแบบ', async ({ page }) => {
+  let registerRequests = 0;
+  page.on('request', (request) => {
+    if (request.method() === 'POST' && request.url().endsWith('/api/auth/register'))
+      registerRequests += 1;
+  });
+  await page.goto('/register');
+  await page.getByTestId('register-username').fill('invalid username');
+  await page.getByTestId('register-password').fill('StrongPass1');
+  await page.getByTestId('register-confirm-password').fill('StrongPass1');
+
+  await page.getByTestId('register-button').click();
+
+  await expect(
+    page.getByText('Use 3–50 letters, numbers, dots, dashes or underscores.'),
+  ).toBeVisible();
+  expect(registerRequests).toBe(0);
 });
 
 test('SEC-AUTH2-001 ปิดบังฟิลด์รหัสผ่านทุกช่อง', async ({ page }) => {
