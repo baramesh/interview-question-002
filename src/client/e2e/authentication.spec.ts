@@ -81,11 +81,19 @@ test('TC-AUTH2-E2E-004 ออกจากระบบและลบ token', asy
   expect(await page.evaluate(() => sessionStorage.getItem('example.q002.accessToken'))).toBeNull();
 });
 
-test('TC-AUTH2-CONTENT-001 ไม่แสดงรหัสข้อสอบหรือศัพท์ภายในบนหน้าจอจริง', async ({
+test('TC-AUTH2-CONTENT-001 ไม่แสดงรหัสข้อสอบ ศัพท์ภายใน หรือรายการนโยบาย Password ค้างไว้', async ({
   page,
   request,
 }) => {
-  const forbiddenText = ['IT 02-', 'Interview Question 002', 'Account access', 'JWT'];
+  const forbiddenText = [
+    'IT 02-',
+    'Interview Question 002',
+    'Account access',
+    'JWT',
+    'At least 8 characters',
+    'Up to 128 characters',
+    'Spaces and symbols are allowed',
+  ];
   const assertProductionCopy = async (): Promise<void> => {
     const visibleText = await page.locator('body').innerText();
     for (const value of forbiddenText) expect(visibleText).not.toContain(value);
@@ -219,8 +227,10 @@ test('SEC-AUTH2-011 ปฏิเสธ JWT ที่ถูกดัดแปล�
     data: { username: value, password: 'StrongPass1' },
   });
   const { accessToken } = (await loginResponse.json()) as { accessToken: string };
-  const lastCharacter = accessToken.at(-1);
-  const tampered = `${accessToken.slice(0, -1)}${lastCharacter === 'A' ? 'B' : 'A'}`;
+  const segments = accessToken.split('.');
+  const signature = segments[2];
+  segments[2] = `${signature[0] === 'A' ? 'B' : 'A'}${signature.slice(1)}`;
+  const tampered = segments.join('.');
   const response = await request.get('/api/auth/me', {
     headers: { Authorization: `Bearer ${tampered}` },
   });

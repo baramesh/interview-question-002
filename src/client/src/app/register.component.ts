@@ -35,18 +35,13 @@ function passwordsMatch(control: AbstractControl): ValidationErrors | null {
     class="auth-shell grid w-full max-w-4xl overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-2xl md:grid-cols-[1.05fr_1fr]"
     data-testid="register-page"
   >
-    <aside class="auth-aside hidden p-10 text-white md:flex md:flex-col md:justify-between">
+    <aside class="auth-aside hidden p-10 text-white md:flex md:flex-col">
       <div>
         <h1 class="m-0 text-4xl font-semibold tracking-tight">Create your account</h1>
         <p class="mt-4 text-sm leading-6 text-indigo-100">
           Create a username and password for your Example.com account.
         </p>
       </div>
-      <ul class="m-0 grid list-disc gap-3 pl-5 text-sm text-indigo-100">
-        <li>At least 8 characters</li>
-        <li>Up to 128 characters</li>
-        <li>Spaces and symbols are allowed</li>
-      </ul>
     </aside>
     <section class="p-6 sm:p-10">
       <h1 class="m-0 text-3xl font-semibold text-slate-950 md:hidden">Create your account</h1>

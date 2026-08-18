@@ -36,11 +36,11 @@ type: playwright-test-case
 
 ## Content
 
-### TC-AUTH2-CONTENT-001 — ไม่แสดงรหัสข้อสอบหรือศัพท์ภายในบนหน้าจอจริง
+### TC-AUTH2-CONTENT-001 — ไม่แสดงรหัสข้อสอบ ศัพท์ภายใน หรือรายการนโยบาย Password ค้างไว้
 
 - เงื่อนไขก่อนทดสอบ: เปิด Login และมีบัญชีสำหรับเข้า Welcome
-- Test Step: 1) ตรวจข้อความทั้งหมดบน Login 2) เปิด Register และตรวจข้อความทั้งหมด 3) เข้าสู่ระบบ เปิด Welcome และตรวจข้อความทั้งหมด 4) ตรวจผลลัพธ์ชื่อผู้ใช้ตามโจทย์
-- ผลที่คาดหวัง: ทั้งสามหน้าไม่แสดง `IT 02-x`, `Interview Question 002`, `Account access` หรือ `JWT` แต่ Welcome ยังแสดง `Welcome User: xxx`
+- Test Step: 1) ตรวจข้อความทั้งหมดบน Login 2) เปิด Register และตรวจข้อความทั้งหมด รวมถึงรายการกฎ Password แบบค้างไว้ 3) เข้าสู่ระบบ เปิด Welcome และตรวจข้อความทั้งหมด 4) ตรวจผลลัพธ์ชื่อผู้ใช้ตามโจทย์
+- ผลที่คาดหวัง: ทั้งสามหน้าไม่แสดง `IT 02-x`, `Interview Question 002`, `Account access` หรือ `JWT`; Register ไม่แสดง `At least 8 characters`, `Up to 128 characters` และ `Spaces and symbols are allowed` แบบค้างไว้; Welcome ยังแสดง `Welcome User: xxx`
 
 ## Validation
 
