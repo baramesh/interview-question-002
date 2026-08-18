@@ -35,6 +35,7 @@
 - Playwright result: `09-qa-and-test/01-authentication/playwright-test-result.md`
 - Unit Test result: `09-qa-and-test/01-authentication/unit-test-result.md`
 - รายงานตรวจรวม: `09-qa-and-test/01-authentication/verification-report-2026-08-18.md`
+- ผลเปรียบเทียบภาพก่อน/หลังการจัดกึ่งกลางการ์ด: `../design-qa.md`
 
 ## กฎการใช้หลักฐาน
 

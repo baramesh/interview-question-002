@@ -21,4 +21,4 @@ type: unit-test-case
 | UI         | UT-UI-AUTH2-001  | ฟอร์ม login บังคับกรอก                      |
 | UI         | UT-UI-AUTH2-002  | register ปฏิเสธ mismatch                    |
 | UI         | UT-UI-AUTH2-003  | login เก็บ token และนำทาง                   |
-| UI         | UT-UI-AUTH2-004  | unauthorized ล้าง token และกลับ login       |
+| UI         | UT-UI-AUTH2-004  | unauthorized ล้าง token กลับ login และส่งข้อความให้เข้าใหม่ |

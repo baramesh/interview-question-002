@@ -2,7 +2,7 @@
 doc_id: QAT-AUTH2-05
 module: AUTH2
 type: unit-test-result
-verified_at: 2026-08-18T12:10:41Z
+verified_at: 2026-08-18T13:37:25Z
 ---
 
 # ผล Unit Test

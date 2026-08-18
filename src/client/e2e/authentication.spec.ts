@@ -174,11 +174,23 @@ test('SEC-AUTH2-002 ปฏิเสธ API me เมื่อไม่มี JWT
   expect(response.status()).toBe(401);
 });
 
-test('SEC-AUTH2-006 ปฏิเสธ API me เมื่อ JWT ไม่ถูกต้อง', async ({ request }) => {
-  const response = await request.get('/api/auth/me', {
-    headers: { Authorization: 'Bearer invalid.token.value' },
-  });
-  expect(response.status()).toBe(401);
+test('SEC-AUTH2-006 ปฏิเสธ JWT ไม่ถูกต้องและแจ้งให้เข้าสู่ระบบใหม่', async ({ page }) => {
+  await page.evaluate(() =>
+    sessionStorage.setItem('example.q002.accessToken', 'invalid.token.value'),
+  );
+  const responsePromise = page.waitForResponse((response) =>
+    response.url().endsWith('/api/auth/me'),
+  );
+
+  await page.goto('/welcome');
+
+  expect((await responsePromise).status()).toBe(401);
+  await expect(page).toHaveURL(/\/login$/);
+  await expect(page.getByTestId('login-error')).toHaveText(
+    'Your session has expired. Please sign in again.',
+  );
+  expect(await page.evaluate(() => sessionStorage.getItem('example.q002.accessToken'))).toBeNull();
+  await expect(page.getByText('JWT')).toHaveCount(0);
 });
 
 test('SEC-AUTH2-003 ใช้ข้อความกลางเมื่อข้อมูลรับรองผิด', async ({ request }) => {
@@ -225,6 +237,20 @@ test('TC-AUTH2-RESP-001 ทุกหน้ารองรับ viewport มื�
   expect(width.page).toBe(width.viewport);
   await expect(page.getByTestId('welcome-page')).toBeVisible();
   await expect(page.getByTestId('welcome-username')).toHaveText('Welcome User: xxx');
+});
+
+test('TC-AUTH2-RESP-002 การ์ด Login อยู่กึ่งกลางพื้นที่ใต้ส่วนหัว', async ({ page }) => {
+  const alignment = await page.getByTestId('login-page').evaluate((element) => {
+    const card = element.getBoundingClientRect();
+    const header = document.querySelector('header')?.getBoundingClientRect();
+    const contentTop = header?.bottom ?? 0;
+    return {
+      cardCenter: card.top + card.height / 2,
+      contentCenter: contentTop + (window.innerHeight - contentTop) / 2,
+    };
+  });
+
+  expect(Math.abs(alignment.cardCenter - alignment.contentCenter)).toBeLessThanOrEqual(1);
 });
 
 test('SEC-AUTH2-005 จำกัดอัตราคำขอเข้าสู่ระบบ', async ({ request }) => {

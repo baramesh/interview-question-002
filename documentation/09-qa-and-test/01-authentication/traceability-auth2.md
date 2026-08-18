@@ -15,3 +15,4 @@ type: traceability
 | IT 02-3 แสดง `Welcome User: xxx` | `/welcome`, `GET /api/auth/me`         | `TC-AUTH2-E2E-003/004`                     |
 | ตรวจ JWT                         | JwtBearer middleware                   | `TC-AUTH2-E2E-003`, `SEC-AUTH2-002/006`    |
 | รองรับมือถือ                     | Responsive Tailwind/Material layout    | `TC-AUTH2-RESP-001`                        |
+| การ์ด Login กึ่งกลางแนวตั้ง       | Tailwind grid ใต้ส่วนหัว           | `TC-AUTH2-RESP-002`                        |

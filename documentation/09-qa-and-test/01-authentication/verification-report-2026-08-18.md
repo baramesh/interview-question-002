@@ -2,7 +2,7 @@
 doc_id: QAT-AUTH2-08
 module: AUTH2
 type: verification-report
-verified_at: 2026-08-18T13:10:08Z
+verified_at: 2026-08-18T13:34:53Z
 ---
 
 # รายงานผลตรวจวันที่ 18 สิงหาคม 2026
@@ -11,8 +11,8 @@ verified_at: 2026-08-18T13:10:08Z
 | ------------------------ | ----------------------------------------------------------------------------------------- |
 | xUnit                    | ผ่าน 15/15                                                                                |
 | Angular Vitest           | ผ่าน 4/4                                                                                  |
-| Playwright Chromium      | ผ่าน 16/16; รายงานสร้าง 20:10:08 น. และมีภาพ 16 ไฟล์                                      |
-| Angular production build | ผ่าน; initial bundle 479.63 kB                                                            |
+| Playwright Chromium      | ผ่าน 17/17; รายงานสร้าง 20:34:53 น. และมีภาพ 17 ไฟล์                                      |
+| Angular production build | ผ่าน; initial bundle 483.84 kB                                                            |
 | NuGet vulnerability scan | ไม่พบแพ็กเกจที่มีช่องโหว่จากแหล่งปัจจุบัน                                                 |
 | npm audit                | ไม่พบช่องโหว่                                                                             |
 | OrbStack                 | client, API และ PostgreSQL ทำงานครบ; PostgreSQL healthy                                   |
@@ -20,10 +20,10 @@ verified_at: 2026-08-18T13:10:08Z
 | Authentication flow      | Register `201`, Login ได้ signed JWT และ `/me` ตอบชื่อผู้ใช้                              |
 | PostgreSQL               | มี `auth_q002.users` และ migration history ใน schema เดียวกัน                             |
 | Password storage         | ตรวจ 30 บัญชีทดสอบ ไม่พบ plaintext หรือค่าที่ไม่ใช่รูปแบบ PasswordHasher                  |
-| JWT                      | ตรวจ signature, issuer, audience, lifetime, raw `unique_name` claim และการปฏิเสธ token ผิดสำเร็จ |
+| JWT                      | token ผิดได้ `401`, ถูกลบจาก sessionStorage, กลับ Login และแสดงข้อความให้เข้าใหม่ |
 | OWASP                    | password hash, generic error, authorization, rate limit และ security headers ผ่าน         |
 | Runtime independence     | client, API และ PostgreSQL เริ่มต้นได้จาก compose ของ repository นี้โดยไม่พึ่ง API ภายนอก |
-| Visual QA                | Desktop/Mobile แสดง `Welcome User: xxx` โดยไม่มีศัพท์ implementation บน UI                |
+| Visual QA                | การ์ด Login กึ่งกลางพื้นที่ใต้ส่วนหัวคลาดเคลื่อนไม่เกิน 1 CSS pixel; ข้อความ session ไม่มีศัพท์เทคนิค |
 
 ## ตำแหน่งหลักฐาน
 

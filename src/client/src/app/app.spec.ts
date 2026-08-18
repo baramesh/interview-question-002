@@ -50,15 +50,17 @@ describe('Authentication UI', () => {
     expect(sessionStorage.getItem(AuthService.tokenKey)).toBe('signed.jwt.value');
   });
 
-  it('clears an unauthorized welcome session', () => {
+  it('clears an unauthorized welcome session and returns an actionable message', () => {
     sessionStorage.setItem(AuthService.tokenKey, 'invalid');
     const router = TestBed.inject(Router);
-    vi.spyOn(router, 'navigateByUrl').mockResolvedValue(true);
+    vi.spyOn(router, 'navigate').mockResolvedValue(true);
     const fixture = TestBed.createComponent(WelcomeComponent);
     fixture.detectChanges();
     const request = http.expectOne('/api/auth/me');
     request.flush({}, { status: 401, statusText: 'Unauthorized' });
     expect(sessionStorage.getItem(AuthService.tokenKey)).toBeNull();
-    expect(router.navigateByUrl).toHaveBeenCalledWith('/login');
+    expect(router.navigate).toHaveBeenCalledWith(['/login'], {
+      state: { error: 'Your session has expired. Please sign in again.' },
+    });
   });
 });

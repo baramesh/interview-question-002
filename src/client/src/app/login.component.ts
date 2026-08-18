@@ -148,7 +148,7 @@ export const sharedStyles = `
 export class LoginComponent {
   readonly showPassword = signal(false);
   readonly busy = signal(false);
-  readonly error = signal<string | null>(null);
+  readonly error = signal((history.state?.['error'] as string | undefined) ?? null);
   readonly message = signal((history.state?.['message'] as string | undefined) ?? null);
   readonly form;
 

@@ -131,7 +131,7 @@ Latest verified result:
 
 - xUnit: 15/15 passed
 - Angular Unit Test: 4/4 passed
-- Playwright Chromium: 12/12 passed with 12 screenshots
+- Playwright Chromium: 17/17 passed with 17 screenshots
 - Angular production build: passed
 - NuGet vulnerability scan and npm audit: no known vulnerabilities from the configured sources
 
@@ -157,5 +157,7 @@ Latest verified result:
 - ผู้ตรวจ API/ฐานข้อมูล: `03-domain-data → 04-arch-desc → 06-api-contract → 09-qa-and-test`
 - ผู้ตรวจ UI: `05-ui-desc → 06-api-contract → 09-qa-and-test`
 - ผู้ตรวจความมั่นคงปลอดภัย: `01-requirements/quality-attributes → 08-security-arch → 09-qa-and-test/security-test-plan.md`
+
+ผลเปรียบเทียบตำแหน่งการ์ด Login กับภาพก่อนแก้อยู่ใน [`design-qa.md`](design-qa.md)
 
 Test Step อยู่ที่ [`playwright-test-cases.md`](documentation/09-qa-and-test/01-authentication/playwright-test-cases.md), ผลและภาพล่าสุดอยู่ที่ [`playwright-test-result.md`](documentation/09-qa-and-test/01-authentication/playwright-test-result.md), และผล Unit Test อยู่ที่ [`unit-test-result.md`](documentation/09-qa-and-test/01-authentication/unit-test-result.md)

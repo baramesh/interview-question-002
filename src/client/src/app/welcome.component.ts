@@ -86,7 +86,12 @@ export class WelcomeComponent implements OnInit {
         this.username.set(username);
         this.loading.set(false);
       },
-      error: () => this.signOut(),
+      error: () => {
+        this.auth.logout();
+        this.router.navigate(['/login'], {
+          state: { error: 'Your session has expired. Please sign in again.' },
+        });
+      },
     });
   }
   signOut(): void {

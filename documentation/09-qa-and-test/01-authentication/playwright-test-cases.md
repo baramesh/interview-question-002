@@ -74,10 +74,10 @@ type: playwright-test-case
 - Test Step: เรียก `GET /api/auth/me` โดยไม่มี Authorization header
 - ผลที่คาดหวัง: API ตอบ `401 Unauthorized`
 
-### SEC-AUTH2-006 — ปฏิเสธ API me เมื่อ JWT ไม่ถูกต้อง
+### SEC-AUTH2-006 — ปฏิเสธ JWT ไม่ถูกต้องและแจ้งให้เข้าสู่ระบบใหม่
 
-- Test Step: เรียก `GET /api/auth/me` ด้วย `Authorization: Bearer invalid.token.value`
-- ผลที่คาดหวัง: API ตอบ `401 Unauthorized` และไม่แสดงข้อมูลผู้ใช้
+- Test Step: 1) เก็บ `invalid.token.value` ใน sessionStorage 2) เปิด `/welcome` 3) ตรวจ response ของ `/api/auth/me` 4) ตรวจ route, ข้อความแจ้ง และ sessionStorage
+- ผลที่คาดหวัง: API ตอบ `401`, ลบ token, กลับ `/login`, แสดง `Your session has expired. Please sign in again.` และไม่แสดงคำว่า JWT ในหน้า
 
 ### SEC-AUTH2-003 — ใช้ข้อความกลางเมื่อข้อมูลรับรองผิด
 
@@ -101,3 +101,9 @@ type: playwright-test-case
 - เงื่อนไขก่อนทดสอบ: viewport 390×844 และมีบัญชีทดสอบ
 - Test Step: เปิด Login, Register และ Welcome แล้วเทียบ `scrollWidth` กับความกว้าง viewport
 - ผลที่คาดหวัง: ทั้งสามหน้าไม่ล้นแนวนอนและแสดง `Welcome User: xxx` หลัง Login
+
+### TC-AUTH2-RESP-002 — การ์ด Login อยู่กึ่งกลางพื้นที่ใต้ส่วนหัว
+
+- เงื่อนไขก่อนทดสอบ: viewport 1440×1100 และเปิด `/login`
+- Test Step: 1) อ่านขอบเขตส่วนหัวและการ์ด 2) คำนวณจุดกึ่งกลางของพื้นที่จากขอบล่างส่วนหัวถึงขอบล่าง viewport 3) เปรียบเทียบกับจุดกึ่งกลางการ์ด
+- ผลที่คาดหวัง: จุดกึ่งกลางแนวตั้งต่างกันไม่เกิน 1 CSS pixel โดยไม่ใช้ระยะด้านบนแบบตายตัว
