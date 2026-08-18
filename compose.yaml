@@ -1,0 +1,54 @@
+name: interview-question-002
+
+services:
+  postgres:
+    image: postgres:18.6-alpine
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-interview_question_002}
+      POSTGRES_USER: ${POSTGRES_USER:-interview_user}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-local_only_change_me}
+    ports:
+      - "127.0.0.1:${POSTGRES_PORT:-5432}:5432"
+    mem_limit: 512m
+    cpus: 1.0
+    volumes:
+      - postgres_data:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+    restart: unless-stopped
+
+  api:
+    build:
+      context: .
+      dockerfile: src/api/Dockerfile
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_URLS: http://+:8080
+      ConnectionStrings__DefaultConnection: Host=postgres;Port=5432;Database=${POSTGRES_DB:-interview_question_002};Username=${POSTGRES_USER:-interview_user};Password=${POSTGRES_PASSWORD:-local_only_change_me}
+      Jwt__SigningKey: ${JWT_SIGNING_KEY:-local-development-only-signing-key-change-me-002}
+    ports:
+      - "127.0.0.1:${API_PORT:-5002}:8080"
+    mem_limit: 512m
+    cpus: 1.0
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: unless-stopped
+
+  client:
+    build:
+      context: .
+      dockerfile: src/client/Dockerfile
+    ports:
+      - "127.0.0.1:${WEB_PORT:-4202}:80"
+    mem_limit: 128m
+    cpus: 0.5
+    depends_on:
+      - api
+    restart: unless-stopped
+
+volumes:
+  postgres_data:

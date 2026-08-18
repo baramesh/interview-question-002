@@ -1,0 +1,26 @@
+<header class="app-header border-b border-slate-200 bg-white/95 backdrop-blur">
+  <div class="mx-auto flex w-[min(1120px,calc(100%-2rem))] items-center justify-between py-4">
+    <div class="flex items-center gap-3">
+      <div
+        class="brand-mark grid size-10 place-items-center rounded-xl text-lg font-bold text-white"
+        aria-hidden="true"
+      >
+        E
+      </div>
+      <div>
+        <p class="m-0 text-sm font-semibold text-slate-950">Example.com</p>
+        <p class="m-0 text-xs text-slate-500">Account access</p>
+      </div>
+    </div>
+    <span
+      class="hidden rounded-full bg-indigo-50 px-3 py-1 text-xs font-semibold text-indigo-800 sm:block"
+      >Interview Question 002</span
+    >
+  </div>
+</header>
+
+<main
+  class="mx-auto grid min-h-[calc(100vh-73px)] w-[min(1120px,calc(100%-2rem))] place-items-center py-8 md:py-12"
+>
+  <router-outlet />
+</main>

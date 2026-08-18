@@ -1,0 +1,38 @@
+@use 'tailwindcss';
+
+html {
+  min-width: 320px;
+  min-height: 100%;
+  background: #f5f7fb;
+  font-family: 'Google Sans', Arial, sans-serif;
+}
+body {
+  min-height: 100vh;
+  margin: 0;
+  background:
+    radial-gradient(circle at 8% 4%, rgb(199 210 254 / 38%), transparent 26%),
+    radial-gradient(circle at 92% 92%, rgb(224 231 255 / 45%), transparent 30%), #f5f7fb;
+}
+button,
+input,
+textarea,
+select,
+.mat-mdc-form-field,
+.mat-mdc-select,
+.mat-mdc-radio-button,
+.mat-mdc-button-base {
+  font-family: inherit;
+}
+
+.mat-mdc-form-field *,
+.mat-mdc-select *,
+.mat-mdc-radio-button *,
+.mat-mdc-button-base,
+.mat-mdc-option {
+  font-family: 'Google Sans', Arial, sans-serif !important;
+}
+
+.mat-mdc-form-field-required-marker {
+  color: #dc2626;
+  font-weight: 700;
+}
