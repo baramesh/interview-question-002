@@ -16,7 +16,7 @@ type: qa-index
 ## ผลล่าสุด
 
 - `unit-test-result.md` — xUnit 15/15 และ Angular 4/4
-- `playwright-test-result.md` — Playwright 12/12 พร้อมภาพ 12 ไฟล์
+- `playwright-test-result.md` — Playwright 16/16 พร้อมภาพ 16 ไฟล์
 - `verification-report-2026-08-18.md` — build, dependency scan, runtime, database และ visual QA
 - `traceability-auth2.md` — การจับคู่โจทย์กับ API/UI และการทดสอบ
 

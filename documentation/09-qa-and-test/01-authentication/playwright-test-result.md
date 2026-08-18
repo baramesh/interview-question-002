@@ -2,7 +2,7 @@
 doc_id: QAT-AUTH2-04
 module: AUTH2
 type: playwright-test-result
-generated_at: 2026-08-18T12:10:59.263Z
+generated_at: 2026-08-18T13:10:08.265Z
 ---
 
 # QAT-AUTH2-04 — ผลทดสอบ Playwright
@@ -21,24 +21,28 @@ generated_at: 2026-08-18T12:10:59.263Z
 
 | ทั้งหมด | ผ่าน | ไม่ผ่าน | สถานะ |
 | ------: | ---: | ------: | ----- |
-|      12 |   12 |       0 | PASS  |
+|      16 |   16 |       0 | PASS  |
 
 ## ผลรายกรณี
 
-| Test Case ID      | ชื่อกรณีทดสอบ                             | ประเภท     | ผล   | เวลา (ms) | Screenshot                                   |
-| ----------------- | ----------------------------------------- | ---------- | ---- | --------: | -------------------------------------------- |
-| TC-AUTH2-E2E-001  | เปิดหน้าสมัครสมาชิกตาม IT 02-2            | Functional | PASS |       485 | [เปิดภาพ](screenshots/tc-auth2-e2e-001.png)  |
-| TC-AUTH2-E2E-002  | สมัครสมาชิกและกลับหน้าเข้าสู่ระบบ         | Functional | PASS |       692 | [เปิดภาพ](screenshots/tc-auth2-e2e-002.png)  |
-| TC-AUTH2-E2E-003  | เข้าสู่ระบบและแสดงชื่อหลังตรวจ JWT        | Functional | PASS |       581 | [เปิดภาพ](screenshots/tc-auth2-e2e-003.png)  |
-| TC-AUTH2-E2E-004  | ออกจากระบบและลบ token                     | Functional | PASS |       468 | [เปิดภาพ](screenshots/tc-auth2-e2e-004.png)  |
-| TC-AUTH2-VAL-001  | ปฏิเสธฟอร์มเข้าสู่ระบบว่างโดยไม่เรียก API | Validation | PASS |       354 | [เปิดภาพ](screenshots/tc-auth2-val-001.png)  |
-| TC-AUTH2-VAL-002  | ปฏิเสธรหัสผ่านยืนยันไม่ตรงกัน             | Validation | PASS |       391 | [เปิดภาพ](screenshots/tc-auth2-val-002.png)  |
-| SEC-AUTH2-001     | ปิดบังฟิลด์รหัสผ่านทุกช่อง                | Security   | PASS |       337 | [เปิดภาพ](screenshots/sec-auth2-001.png)     |
-| SEC-AUTH2-002     | ปฏิเสธ API me เมื่อไม่มี JWT              | Security   | PASS |       262 | [เปิดภาพ](screenshots/sec-auth2-002.png)     |
-| SEC-AUTH2-003     | ใช้ข้อความกลางเมื่อข้อมูลรับรองผิด        | Security   | PASS |       414 | [เปิดภาพ](screenshots/sec-auth2-003.png)     |
-| SEC-AUTH2-004     | ส่ง security headers ผ่าน Nginx           | Security   | PASS |       283 | [เปิดภาพ](screenshots/sec-auth2-004.png)     |
-| TC-AUTH2-RESP-001 | ทุกหน้ารองรับ viewport มือถือ             | Responsive | PASS |       448 | [เปิดภาพ](screenshots/tc-auth2-resp-001.png) |
-| SEC-AUTH2-005     | จำกัดอัตราคำขอเข้าสู่ระบบ                 | Security   | PASS |       667 | [เปิดภาพ](screenshots/sec-auth2-005.png)     |
+| Test Case ID      | ชื่อกรณีทดสอบ                                               | ประเภท     | ผล   | เวลา (ms) | Screenshot                                   |
+| ----------------- | ----------------------------------------------------------- | ---------- | ---- | --------: | -------------------------------------------- |
+| TC-AUTH2-E2E-001  | เปิดหน้าสมัครสมาชิกตาม IT 02-2                              | Functional | PASS |       298 | [เปิดภาพ](screenshots/tc-auth2-e2e-001.png)  |
+| TC-AUTH2-E2E-002  | สมัครสมาชิกและกลับหน้าเข้าสู่ระบบ                           | Functional | PASS |       503 | [เปิดภาพ](screenshots/tc-auth2-e2e-002.png)  |
+| TC-AUTH2-E2E-003  | เข้าสู่ระบบและแสดงชื่อหลังตรวจ JWT                          | Functional | PASS |       431 | [เปิดภาพ](screenshots/tc-auth2-e2e-003.png)  |
+| TC-AUTH2-E2E-004  | ออกจากระบบและลบ token                                       | Functional | PASS |       374 | [เปิดภาพ](screenshots/tc-auth2-e2e-004.png)  |
+| TC-AUTH2-VAL-001  | ปฏิเสธฟอร์มเข้าสู่ระบบว่างโดยไม่เรียก API                   | Validation | PASS |       255 | [เปิดภาพ](screenshots/tc-auth2-val-001.png)  |
+| TC-AUTH2-VAL-002  | ปฏิเสธรหัสผ่านยืนยันไม่ตรงกัน                               | Validation | PASS |       309 | [เปิดภาพ](screenshots/tc-auth2-val-002.png)  |
+| TC-AUTH2-VAL-003  | ปฏิเสธ Username ซ้ำแบบไม่แยกตัวพิมพ์                        | Validation | PASS |       381 | [เปิดภาพ](screenshots/tc-auth2-val-003.png)  |
+| TC-AUTH2-VAL-004  | ปฏิเสธรหัสผ่านที่ไม่ผ่านกฎบนหน้าสมัคร                       | Validation | PASS |       324 | [เปิดภาพ](screenshots/tc-auth2-val-004.png)  |
+| TC-AUTH2-VAL-005  | API สมัครสมาชิกตอบ Problem Details เมื่อ payload ไม่ถูกต้อง | Validation | PASS |       209 | [เปิดภาพ](screenshots/tc-auth2-val-005.png)  |
+| SEC-AUTH2-001     | ปิดบังฟิลด์รหัสผ่านทุกช่อง                                  | Security   | PASS |       247 | [เปิดภาพ](screenshots/sec-auth2-001.png)     |
+| SEC-AUTH2-002     | ปฏิเสธ API me เมื่อไม่มี JWT                                | Security   | PASS |       203 | [เปิดภาพ](screenshots/sec-auth2-002.png)     |
+| SEC-AUTH2-006     | ปฏิเสธ API me เมื่อ JWT ไม่ถูกต้อง                          | Security   | PASS |       203 | [เปิดภาพ](screenshots/sec-auth2-006.png)     |
+| SEC-AUTH2-003     | ใช้ข้อความกลางเมื่อข้อมูลรับรองผิด                          | Security   | PASS |       326 | [เปิดภาพ](screenshots/sec-auth2-003.png)     |
+| SEC-AUTH2-004     | ส่ง security headers ผ่าน Nginx                             | Security   | PASS |       217 | [เปิดภาพ](screenshots/sec-auth2-004.png)     |
+| TC-AUTH2-RESP-001 | ทุกหน้ารองรับ viewport มือถือ                               | Responsive | PASS |       367 | [เปิดภาพ](screenshots/tc-auth2-resp-001.png) |
+| SEC-AUTH2-005     | จำกัดอัตราคำขอเข้าสู่ระบบ                                   | Security   | PASS |       407 | [เปิดภาพ](screenshots/sec-auth2-005.png)     |
 
 ## ภาพหลักฐาน
 
@@ -66,6 +70,18 @@ generated_at: 2026-08-18T12:10:59.263Z
 
 ![TC-AUTH2-VAL-002 — ปฏิเสธรหัสผ่านยืนยันไม่ตรงกัน](screenshots/tc-auth2-val-002.png)
 
+### TC-AUTH2-VAL-003 — ปฏิเสธ Username ซ้ำแบบไม่แยกตัวพิมพ์
+
+![TC-AUTH2-VAL-003 — ปฏิเสธ Username ซ้ำแบบไม่แยกตัวพิมพ์](screenshots/tc-auth2-val-003.png)
+
+### TC-AUTH2-VAL-004 — ปฏิเสธรหัสผ่านที่ไม่ผ่านกฎบนหน้าสมัคร
+
+![TC-AUTH2-VAL-004 — ปฏิเสธรหัสผ่านที่ไม่ผ่านกฎบนหน้าสมัคร](screenshots/tc-auth2-val-004.png)
+
+### TC-AUTH2-VAL-005 — API สมัครสมาชิกตอบ Problem Details เมื่อ payload ไม่ถูกต้อง
+
+![TC-AUTH2-VAL-005 — API สมัครสมาชิกตอบ Problem Details เมื่อ payload ไม่ถูกต้อง](screenshots/tc-auth2-val-005.png)
+
 ### SEC-AUTH2-001 — ปิดบังฟิลด์รหัสผ่านทุกช่อง
 
 ![SEC-AUTH2-001 — ปิดบังฟิลด์รหัสผ่านทุกช่อง](screenshots/sec-auth2-001.png)
@@ -73,6 +89,10 @@ generated_at: 2026-08-18T12:10:59.263Z
 ### SEC-AUTH2-002 — ปฏิเสธ API me เมื่อไม่มี JWT
 
 ![SEC-AUTH2-002 — ปฏิเสธ API me เมื่อไม่มี JWT](screenshots/sec-auth2-002.png)
+
+### SEC-AUTH2-006 — ปฏิเสธ API me เมื่อ JWT ไม่ถูกต้อง
+
+![SEC-AUTH2-006 — ปฏิเสธ API me เมื่อ JWT ไม่ถูกต้อง](screenshots/sec-auth2-006.png)
 
 ### SEC-AUTH2-003 — ใช้ข้อความกลางเมื่อข้อมูลรับรองผิด
 

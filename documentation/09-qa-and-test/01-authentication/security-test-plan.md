@@ -13,6 +13,7 @@ type: security-test-plan
 | Account enumeration      | เปรียบเทียบ error ของชื่อไม่มีจริงและ password ผิด     | `SEC-AUTH2-003`                             |
 | Security headers         | อ่าน response ผ่าน Nginx                               | `SEC-AUTH2-004`                             |
 | Brute-force resistance   | ส่ง Login เกิน fixed-window limit                      | `SEC-AUTH2-005`                             |
+| Invalid token rejection  | เรียก `/me` ด้วย JWT ที่ไม่ถูกต้อง                 | `SEC-AUTH2-006`                             |
 | Dependency exposure      | `dotnet list package --vulnerable` และ `npm audit`     | verification report                         |
 
 การตรวจ production ที่ยังไม่รวม: TLS, secret manager, key rotation, token revocation, DAST และส่วนจัดเก็บ log กลาง

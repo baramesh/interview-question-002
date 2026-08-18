@@ -107,6 +107,61 @@ test('TC-AUTH2-VAL-002 ปฏิเสธรหัสผ่านยืนยั
   expect(registerRequests).toBe(0);
 });
 
+test('TC-AUTH2-VAL-003 ปฏิเสธ Username ซ้ำแบบไม่แยกตัวพิมพ์', async ({ page, request }) => {
+  const value = username('duplicate');
+  await register(request, value);
+  await page.goto('/register');
+  await page.getByTestId('register-username').fill(value.toUpperCase());
+  await page.getByTestId('register-password').fill('StrongPass1');
+  await page.getByTestId('register-confirm-password').fill('StrongPass1');
+  const responsePromise = page.waitForResponse((response) =>
+    response.url().endsWith('/api/auth/register'),
+  );
+
+  await page.getByTestId('register-button').click();
+
+  expect((await responsePromise).status()).toBe(409);
+  await expect(page).toHaveURL(/\/register$/);
+  await expect(page.getByTestId('register-error')).toHaveText('Username is already registered.');
+  await expect(page.getByTestId('register-username')).toHaveValue(value.toUpperCase());
+  await expect(page.getByTestId('register-button')).toBeEnabled();
+});
+
+test('TC-AUTH2-VAL-004 ปฏิเสธรหัสผ่านที่ไม่ผ่านกฎบนหน้าสมัคร', async ({ page }) => {
+  let registerRequests = 0;
+  page.on('request', (request) => {
+    if (request.method() === 'POST' && request.url().endsWith('/api/auth/register'))
+      registerRequests += 1;
+  });
+  await page.goto('/register');
+  await page.getByTestId('register-username').fill('weak.password');
+  await page.getByTestId('register-password').fill('weakpass');
+  await page.getByTestId('register-confirm-password').fill('weakpass');
+
+  await page.getByTestId('register-button').click();
+
+  await expect(page.getByText('Use 8+ characters with upper, lower and number.')).toBeVisible();
+  expect(registerRequests).toBe(0);
+});
+
+test('TC-AUTH2-VAL-005 API สมัครสมาชิกตอบ Problem Details เมื่อ payload ไม่ถูกต้อง', async ({
+  request,
+}) => {
+  const response = await request.post('/api/auth/register', {
+    data: { username: 'a', password: 'weak', confirmPassword: 'different' },
+  });
+  const body = (await response.json()) as {
+    title: string;
+    status: number;
+    errors: Record<string, string[]>;
+  };
+
+  expect(response.status()).toBe(400);
+  expect(body.title).toBe('One or more validation errors occurred.');
+  expect(body.status).toBe(400);
+  expect(Object.keys(body.errors).length).toBeGreaterThan(0);
+});
+
 test('SEC-AUTH2-001 ปิดบังฟิลด์รหัสผ่านทุกช่อง', async ({ page }) => {
   await expect(page.getByTestId('login-password')).toHaveAttribute('type', 'password');
   await page.goto('/register');
@@ -116,6 +171,13 @@ test('SEC-AUTH2-001 ปิดบังฟิลด์รหัสผ่านท
 
 test('SEC-AUTH2-002 ปฏิเสธ API me เมื่อไม่มี JWT', async ({ request }) => {
   const response = await request.get('/api/auth/me');
+  expect(response.status()).toBe(401);
+});
+
+test('SEC-AUTH2-006 ปฏิเสธ API me เมื่อ JWT ไม่ถูกต้อง', async ({ request }) => {
+  const response = await request.get('/api/auth/me', {
+    headers: { Authorization: 'Bearer invalid.token.value' },
+  });
   expect(response.status()).toBe(401);
 });
 

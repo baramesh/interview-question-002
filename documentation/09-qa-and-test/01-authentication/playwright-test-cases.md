@@ -46,6 +46,22 @@ type: playwright-test-case
 - Test Step: 1) เปิด `/register` 2) กรอกรหัสผ่านต่างกัน 3) กด Create account 4) ตรวจข้อความและคำขอ API
 - ผลที่คาดหวัง: แสดง `Passwords must match.` และไม่เรียก `/api/auth/register`
 
+### TC-AUTH2-VAL-003 — ปฏิเสธ Username ซ้ำแบบไม่แยกตัวพิมพ์
+
+- เงื่อนไขก่อนทดสอบ: มี Username ในฐานข้อมูลแล้ว
+- Test Step: 1) เปิด `/register` 2) กรอก Username เดิมด้วยตัวพิมพ์ต่างกัน 3) กด Create account 4) ตรวจ response, route, ข้อความผิดพลาด และสถานะปุ่ม
+- ผลที่คาดหวัง: API ตอบ `409`, ยังอยู่ `/register`, แสดง `Username is already registered.` และปุ่มกลับมาใช้ได้
+
+### TC-AUTH2-VAL-004 — ปฏิเสธรหัสผ่านที่ไม่ผ่านกฎบนหน้าสมัคร
+
+- Test Step: 1) เปิด `/register` 2) กรอกรหัสผ่านที่มีเฉพาะตัวพิมพ์เล็ก 3) กด Create account 4) ตรวจข้อผิดพลาดและจำนวนคำขอ API
+- ผลที่คาดหวัง: แสดง `Use 8+ characters with upper, lower and number.` และไม่เรียก `/api/auth/register`
+
+### TC-AUTH2-VAL-005 — API สมัครสมาชิกตอบ Problem Details เมื่อ payload ไม่ถูกต้อง
+
+- Test Step: ส่ง `POST /api/auth/register` ด้วย Username สั้นเกิน รหัสผ่านไม่ผ่านกฎ และ Confirm password ไม่ตรงกัน
+- ผลที่คาดหวัง: API ตอบ `400` แบบ Problem Details โดยมี `title`, `status = 400` และ `errors`
+
 ## Security
 
 ### SEC-AUTH2-001 — ปิดบังฟิลด์รหัสผ่านทุกช่อง
@@ -57,6 +73,11 @@ type: playwright-test-case
 
 - Test Step: เรียก `GET /api/auth/me` โดยไม่มี Authorization header
 - ผลที่คาดหวัง: API ตอบ `401 Unauthorized`
+
+### SEC-AUTH2-006 — ปฏิเสธ API me เมื่อ JWT ไม่ถูกต้อง
+
+- Test Step: เรียก `GET /api/auth/me` ด้วย `Authorization: Bearer invalid.token.value`
+- ผลที่คาดหวัง: API ตอบ `401 Unauthorized` และไม่แสดงข้อมูลผู้ใช้
 
 ### SEC-AUTH2-003 — ใช้ข้อความกลางเมื่อข้อมูลรับรองผิด
 
