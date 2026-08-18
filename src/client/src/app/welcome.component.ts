@@ -18,8 +18,7 @@ import { AuthService } from './auth.service';
       >
         E
       </div>
-      <p class="mb-0 mt-6 text-xs font-bold uppercase tracking-[.18em] text-indigo-200">IT 02-3</p>
-      <h1 class="mt-2 text-4xl font-semibold tracking-tight">Welcome</h1>
+      <h1 class="mb-0 mt-6 text-4xl font-semibold tracking-tight">Welcome</h1>
     </div>
     <section class="px-6 py-8 text-center sm:px-10 sm:py-10">
       @if (loading()) {

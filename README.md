@@ -131,7 +131,7 @@ Latest verified result:
 
 - xUnit: 15/15 passed
 - Angular Unit Test: 4/4 passed
-- Playwright Chromium: 17/17 passed with 17 screenshots
+- Playwright Chromium: 18/18 passed with 18 screenshots
 - Angular production build: passed
 - NuGet vulnerability scan and npm audit: no known vulnerabilities from the configured sources
 

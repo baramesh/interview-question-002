@@ -37,8 +37,7 @@ function passwordsMatch(control: AbstractControl): ValidationErrors | null {
   >
     <aside class="auth-aside hidden p-10 text-white md:flex md:flex-col md:justify-between">
       <div>
-        <p class="m-0 text-xs font-bold uppercase tracking-[.18em] text-indigo-200">IT 02-2</p>
-        <h1 class="mt-4 text-4xl font-semibold tracking-tight">Create your account</h1>
+        <h1 class="m-0 text-4xl font-semibold tracking-tight">Create your account</h1>
         <p class="mt-4 text-sm leading-6 text-indigo-100">
           Create a username and password for your Example.com account.
         </p>
@@ -50,9 +49,8 @@ function passwordsMatch(control: AbstractControl): ValidationErrors | null {
       </ul>
     </aside>
     <section class="p-6 sm:p-10">
-      <p class="m-0 text-xs font-bold uppercase tracking-[.18em] text-indigo-700">New account</p>
-      <h1 class="mt-2 text-3xl font-semibold text-slate-950 md:hidden">Create your account</h1>
-      <h2 class="mt-2 text-2xl font-semibold text-slate-950 md:mt-6">Registration</h2>
+      <h1 class="m-0 text-3xl font-semibold text-slate-950 md:hidden">Create your account</h1>
+      <h2 class="mt-2 text-2xl font-semibold text-slate-950 md:mt-0">Create account</h2>
       <p class="mt-2 text-sm leading-6 text-slate-600">
         Fields marked <span class="required-marker">*</span> are required.
       </p>

@@ -35,8 +35,7 @@ export const sharedStyles = `
   >
     <aside class="auth-aside hidden p-10 text-white md:flex md:flex-col md:justify-between">
       <div>
-        <p class="m-0 text-xs font-bold uppercase tracking-[.18em] text-indigo-200">IT 02-1</p>
-        <h1 class="mt-4 text-4xl font-semibold tracking-tight">Welcome back</h1>
+        <h1 class="m-0 text-4xl font-semibold tracking-tight">Welcome back</h1>
         <p class="mt-4 max-w-sm text-sm leading-6 text-indigo-100">
           Sign in to continue to your Example.com account.
         </p>
@@ -49,11 +48,10 @@ export const sharedStyles = `
       </div>
     </aside>
     <section class="p-6 sm:p-10">
-      <p class="m-0 text-xs font-bold uppercase tracking-[.18em] text-indigo-700">Account access</p>
-      <h1 class="mt-2 text-3xl font-semibold tracking-tight text-slate-950 md:hidden">
+      <h1 class="m-0 text-3xl font-semibold tracking-tight text-slate-950 md:hidden">
         Welcome back
       </h1>
-      <h2 class="mt-2 text-2xl font-semibold text-slate-950 md:mt-6">Sign in</h2>
+      <h2 class="mt-2 text-2xl font-semibold text-slate-950 md:mt-0">Sign in</h2>
       <p class="mt-2 text-sm leading-6 text-slate-600">
         Fields marked <span class="required-marker">*</span> are required.
       </p>

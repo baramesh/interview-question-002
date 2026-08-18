@@ -1,14 +1,16 @@
-# Design QA — Login centering and invalid-session feedback
+# Design QA — Login centering, production copy and session feedback
 
 ## Evidence
 
 - Source visual truth: `documentation/09-qa-and-test/01-authentication/screenshots/design-reference-login-offset.png`
 - Implementation: `documentation/09-qa-and-test/01-authentication/screenshots/tc-auth2-resp-002.png`
-- Combined comparison: `documentation/09-qa-and-test/01-authentication/screenshots/design-qa-login-centering-comparison.png`
+- Combined comparison: `documentation/09-qa-and-test/01-authentication/screenshots/design-qa-production-copy-comparison.png`
+- Register production copy: `documentation/09-qa-and-test/01-authentication/screenshots/tc-auth2-e2e-001.png`
+- Welcome production copy: `documentation/09-qa-and-test/01-authentication/screenshots/tc-auth2-content-001.png`
 - Invalid-session state: `documentation/09-qa-and-test/01-authentication/screenshots/sec-auth2-006.png`
 - Viewport and CSS size: 1440×1100 px at device scale factor 1
 - Source pixels: 1440×1100; implementation pixels: 1440×1100; no density normalization required
-- Compared state: desktop `/login`; invalid-session feedback inspected separately because the source visual contains the default Login state
+- Compared state: desktop `/login`; Register, Welcome and invalid-session feedback inspected separately
 
 ## Findings
 
@@ -18,9 +20,9 @@ No actionable P0, P1, or P2 findings remain.
 - Spacing and layout rhythm: the source card was about 98 px below the center of the content area. After hiding the inactive `router-outlet` grid item, the card measures top 317 px, height 539 px, center 586.5 px; the area below the 73 px header also centers at 586.5 px. Delta is 0 CSS px.
 - Colors and visual tokens: indigo surfaces, pale background, borders, shadows, and semantic red error treatment remain consistent.
 - Image quality and asset fidelity: no photographic or generated image assets occur in this screen; the existing brand mark and all existing visual treatments are preserved.
-- Copy and content: the default Login copy is unchanged. Invalid sessions now show `Your session has expired. Please sign in again.` without exposing JWT or other implementation terminology.
+- Copy and content: production UI no longer exposes `IT 02-x`, `Interview Question 002`, `Account access` or JWT. Login retains the task-oriented sign-in copy, Register retains password guidance, Welcome retains the required `Welcome User: {username}` result, and invalid sessions show `Your session has expired. Please sign in again.`
 
-Focused comparison was required only for the invalid-session state. Its screenshot confirms the error message is visible above the form, remains readable, and does not disturb the two-column card layout.
+Focused review covered Register, Welcome and the invalid-session state because those states are not present in the Login source. Their screenshots confirm that internal labels are absent, user guidance remains complete, and the hierarchy stays balanced after the copy removal.
 
 ## Comparison History
 
@@ -28,6 +30,9 @@ Focused comparison was required only for the invalid-session state. Its screensh
 2. Fix — applied Tailwind `hidden` to `router-outlet` while retaining `grid place-items-center` on the area below the header; no fixed top offset was introduced.
 3. Post-fix evidence — `TC-AUTH2-RESP-002` passed with a measured center delta of 0 CSS px; the combined comparison shows the intentional upward correction with all other design surfaces preserved.
 4. Session feedback — `SEC-AUTH2-006` passed, including API `401`, token removal, Login redirect, neutral user-facing error text, and absence of JWT wording. Browser console errors: 0.
+5. P2 — screen identifiers and assessment labels were visible in the product UI, making the implementation look like a test harness rather than a production screen.
+6. Fix — removed `IT 02-x`, `Interview Question 002`, `Account access` and redundant registration labels from Login, Register, Welcome and the global header; retained only user-facing product copy.
+7. Post-fix evidence — `TC-AUTH2-CONTENT-001` passed across all three routes. The combined Login comparison and focused Register/Welcome captures show no hierarchy, alignment or spacing regression.
 
 ## Implementation Checklist
 
@@ -35,6 +40,8 @@ Focused comparison was required only for the invalid-session state. Its screensh
 - [x] Avoid fixed top margin or padding as the centering mechanism.
 - [x] Show an actionable, non-technical message after an invalid session.
 - [x] Verify default, invalid-session, responsive, and security flows through Playwright.
+- [x] Keep assessment identifiers and implementation terminology in documentation and tests only.
+- [x] Verify production copy on Login, Register and Welcome through Playwright.
 
 ## Follow-up Polish
 

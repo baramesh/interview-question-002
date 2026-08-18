@@ -81,6 +81,25 @@ test('TC-AUTH2-E2E-004 ออกจากระบบและลบ token', asy
   expect(await page.evaluate(() => sessionStorage.getItem('example.q002.accessToken'))).toBeNull();
 });
 
+test('TC-AUTH2-CONTENT-001 ไม่แสดงรหัสข้อสอบหรือศัพท์ภายในบนหน้าจอจริง', async ({
+  page,
+  request,
+}) => {
+  const forbiddenText = ['IT 02-', 'Interview Question 002', 'Account access', 'JWT'];
+  const assertProductionCopy = async (): Promise<void> => {
+    const visibleText = await page.locator('body').innerText();
+    for (const value of forbiddenText) expect(visibleText).not.toContain(value);
+  };
+
+  await assertProductionCopy();
+  await page.goto('/register');
+  await assertProductionCopy();
+  await ensureRegistered(request, 'xxx');
+  await login(page, 'xxx');
+  await assertProductionCopy();
+  await expect(page.getByTestId('welcome-username')).toHaveText('Welcome User: xxx');
+});
+
 test('TC-AUTH2-VAL-001 ปฏิเสธฟอร์มเข้าสู่ระบบว่างโดยไม่เรียก API', async ({ page }) => {
   let loginRequests = 0;
   page.on('request', (request) => {

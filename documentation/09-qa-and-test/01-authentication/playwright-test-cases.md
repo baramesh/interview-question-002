@@ -34,6 +34,14 @@ type: playwright-test-case
 - Test Step: 1) กด Sign out 2) ตรวจ route 3) อ่าน `sessionStorage`
 - ผลที่คาดหวัง: กลับ `/login` และไม่เหลือ access token
 
+## Content
+
+### TC-AUTH2-CONTENT-001 — ไม่แสดงรหัสข้อสอบหรือศัพท์ภายในบนหน้าจอจริง
+
+- เงื่อนไขก่อนทดสอบ: เปิด Login และมีบัญชีสำหรับเข้า Welcome
+- Test Step: 1) ตรวจข้อความทั้งหมดบน Login 2) เปิด Register และตรวจข้อความทั้งหมด 3) เข้าสู่ระบบ เปิด Welcome และตรวจข้อความทั้งหมด 4) ตรวจผลลัพธ์ชื่อผู้ใช้ตามโจทย์
+- ผลที่คาดหวัง: ทั้งสามหน้าไม่แสดง `IT 02-x`, `Interview Question 002`, `Account access` หรือ `JWT` แต่ Welcome ยังแสดง `Welcome User: xxx`
+
 ## Validation
 
 ### TC-AUTH2-VAL-001 — ปฏิเสธฟอร์มเข้าสู่ระบบว่าง

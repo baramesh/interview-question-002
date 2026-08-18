@@ -141,6 +141,7 @@ function escapeCell(value: string): string {
   return value.replaceAll('|', '\\|').replaceAll('\n', '<br>');
 }
 function category(id: string): string {
+  if (id.includes('-CONTENT-')) return 'Content';
   if (id.includes('-VAL-')) return 'Validation';
   if (id.includes('-RESP-')) return 'Responsive';
   if (id.startsWith('SEC-')) return 'Security';
