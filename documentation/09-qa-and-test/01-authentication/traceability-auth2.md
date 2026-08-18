@@ -13,7 +13,8 @@ type: traceability
 | Password เป็น `*`                | Material password inputs               | `SEC-AUTH2-001`                                  |
 | Password เข้ารหัส                | PasswordHasher + `password_hash`       | xUnit hash case และ verification report          |
 | IT 02-3 แสดง `Welcome User: xxx` | `/welcome`, `GET /api/auth/me`         | `TC-AUTH2-E2E-003/004`                           |
-| ตรวจ JWT                         | JwtBearer middleware                   | `TC-AUTH2-E2E-003`, `SEC-AUTH2-002/006`          |
+| ตรวจ JWT                         | JwtBearer middleware                   | `TC-AUTH2-E2E-003`, `SEC-AUTH2-002/006/011`      |
+| OWASP Register/Login             | API, Nginx, PostgreSQL และ browser     | `SEC-AUTH2-001`–`013`, verification report       |
 | ไม่แสดงรหัสภายในบน UI            | Login, Register และ Welcome            | `TC-AUTH2-CONTENT-001`                           |
 | รองรับมือถือ                     | Responsive Tailwind/Material layout    | `TC-AUTH2-RESP-001`                              |
 | การ์ด Login กึ่งกลางแนวตั้ง      | Tailwind grid ใต้ส่วนหัว               | `TC-AUTH2-RESP-002`                              |

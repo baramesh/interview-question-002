@@ -60,10 +60,10 @@ type: playwright-test-case
 - Test Step: 1) เปิด `/register` 2) กรอก Username เดิมด้วยตัวพิมพ์ต่างกัน 3) กด Create account 4) ตรวจ response, route, ข้อความผิดพลาด และสถานะปุ่ม
 - ผลที่คาดหวัง: API ตอบ `409`, ยังอยู่ `/register`, แสดง `Username is already registered.` และปุ่มกลับมาใช้ได้
 
-### TC-AUTH2-VAL-004 — ปฏิเสธรหัสผ่านที่ไม่ผ่านกฎบนหน้าสมัคร
+### TC-AUTH2-VAL-004 — ปฏิเสธรหัสผ่านที่สั้นกว่าแปดตัวอักษร
 
-- Test Step: 1) เปิด `/register` 2) กรอกรหัสผ่านที่มีเฉพาะตัวพิมพ์เล็ก 3) กด Create account 4) ตรวจข้อผิดพลาดและจำนวนคำขอ API
-- ผลที่คาดหวัง: แสดง `Use 8+ characters with upper, lower and number.` และไม่เรียก `/api/auth/register`
+- Test Step: 1) เปิด `/register` 2) กรอกรหัสผ่าน `short` 3) กด Create account 4) ตรวจข้อผิดพลาดและจำนวนคำขอ API
+- ผลที่คาดหวัง: แสดง `Use at least 8 characters.` และไม่เรียก `/api/auth/register`
 
 ### TC-AUTH2-VAL-005 — API สมัครสมาชิกตอบ Problem Details เมื่อ payload ไม่ถูกต้อง
 
@@ -97,9 +97,44 @@ type: playwright-test-case
 - Test Step: เปิด `/login` แล้วอ่าน response headers
 - ผลที่คาดหวัง: มี CSP, nosniff, frame deny, no-referrer และ permissions policy
 
+### SEC-AUTH2-013 — ไม่เปิดเผยรุ่นของ web server
+
+- Test Step: เปิด `/login` แล้วอ่าน `Server` response header
+- ผลที่คาดหวัง: แสดงชนิด `nginx` โดยไม่มีหมายเลขรุ่น
+
+### SEC-AUTH2-007 — ป้องกัน SQL injection ที่ช่อง Username ของ Login
+
+- Test Step: ส่ง Login ด้วย Username `' OR 1=1 --` และรหัสผ่านผิด
+- ผลที่คาดหวัง: API ตอบ `401` ด้วยข้อความกลาง ไม่เข้าสู่ระบบและไม่เกิด `500`
+
+### SEC-AUTH2-008 — ไม่อนุญาต CORS จาก origin ที่ไม่เชื่อถือ
+
+- Test Step: ส่ง preflight `OPTIONS /api/auth/login` จาก `https://attacker.example`
+- ผลที่คาดหวัง: response ไม่มี `Access-Control-Allow-Origin`
+
+### SEC-AUTH2-009 — ปฏิเสธ payload ที่เกินขนาดกำหนด
+
+- Test Step: ส่ง Register payload ขนาดเกิน 70 KiB ผ่าน Nginx
+- ผลที่คาดหวัง: ตอบ `413 Payload Too Large`
+
+### SEC-AUTH2-010 — ไม่ cache ผลตอบกลับที่เกี่ยวกับการยืนยันตัวตน
+
+- Test Step: Login ด้วยข้อมูลผิดแล้วอ่าน response headers
+- ผลที่คาดหวัง: มี `Cache-Control: no-store` และ `Pragma: no-cache`
+
+### SEC-AUTH2-011 — ปฏิเสธ JWT ที่ถูกดัดแปลง
+
+- Test Step: 1) Login เพื่อรับ token 2) เปลี่ยนอักขระลายเซ็น 3) เรียก `/api/auth/me`
+- ผลที่คาดหวัง: API ตอบ `401 Unauthorized`
+
+### SEC-AUTH2-012 — จำกัดอัตราคำขอสมัครสมาชิก
+
+- Test Step: ส่ง Register ไม่ถูกต้อง 15 ครั้งต่อเนื่องจากผู้เรียกเดียวกัน
+- ผลที่คาดหวัง: พบ `429 Too Many Requests` อย่างน้อยหนึ่งครั้ง
+
 ### SEC-AUTH2-005 — จำกัดอัตราคำขอเข้าสู่ระบบ
 
-- Test Step: ส่ง Login ผิดต่อเนื่อง 25 ครั้งจากผู้เรียกเดียวกัน
+- Test Step: ส่ง Login ผิดต่อเนื่อง 15 ครั้งจากผู้เรียกเดียวกัน
 - ผลที่คาดหวัง: พบ `429 Too Many Requests` อย่างน้อยหนึ่งครั้ง
 
 ## Responsive

@@ -1,5 +1,4 @@
 using System.ComponentModel.DataAnnotations;
-using Example.InterviewQuestion002.Api.Security;
 
 namespace Example.InterviewQuestion002.Api.Contracts;
 
@@ -19,13 +18,6 @@ public sealed class RegisterRequest : IValidatableObject
 
     public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
     {
-        if (!CredentialRules.IsStrongPassword(Password))
-        {
-            yield return new ValidationResult(
-                "Password must contain an uppercase letter, a lowercase letter, and a number.",
-                [nameof(Password)]);
-        }
-
         if (!string.Equals(Password, ConfirmPassword, StringComparison.Ordinal))
         {
             yield return new ValidationResult("Passwords do not match.", [nameof(ConfirmPassword)]);

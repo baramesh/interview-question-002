@@ -1,3 +1,4 @@
+using System.Buffers.Binary;
 using System.ComponentModel.DataAnnotations;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -26,14 +27,25 @@ public sealed class AuthenticationTests
     }
 
     [Theory]
+    [InlineData("")]
     [InlineData("short1A")]
-    [InlineData("alllowercase1")]
-    [InlineData("ALLUPPERCASE1")]
-    [InlineData("NoNumberHere")]
-    public void Register_rejects_weak_password(string password)
+    [InlineData("1234567")]
+    public void Register_rejects_password_shorter_than_eight_characters(string password)
     {
         var request = new RegisterRequest { Username = "tester", Password = password, ConfirmPassword = password };
         Assert.False(IsValid(request));
+    }
+
+    [Fact]
+    public void Register_accepts_passwords_without_composition_rules()
+    {
+        var request = new RegisterRequest
+        {
+            Username = "tester",
+            Password = "all lowercase passphrase",
+            ConfirmPassword = "all lowercase passphrase"
+        };
+        Assert.True(IsValid(request));
     }
 
     [Fact]
@@ -53,10 +65,18 @@ public sealed class AuthenticationTests
     public void Password_hash_is_not_plaintext_and_can_be_verified()
     {
         var user = User("tester");
-        var hasher = new PasswordHasher<AppUser>();
+        var hasher = SecureHasher();
         user.PasswordHash = hasher.HashPassword(user, "StrongPass1");
         Assert.NotEqual("StrongPass1", user.PasswordHash);
         Assert.NotEqual(PasswordVerificationResult.Failed, hasher.VerifyHashedPassword(user, user.PasswordHash, "StrongPass1"));
+    }
+
+    [Fact]
+    public void Password_hash_uses_the_documented_pbkdf2_work_factor()
+    {
+        var hash = Convert.FromBase64String(SecureHasher().HashPassword(User("tester"), "StrongPass1"));
+        var iterations = BinaryPrimitives.ReadUInt32BigEndian(hash.AsSpan(5, 4));
+        Assert.Equal(220_000U, iterations);
     }
 
     [Fact]
@@ -90,7 +110,7 @@ public sealed class AuthenticationTests
     {
         await using var db = CreateDb();
         var user = User("tester");
-        var hasher = new PasswordHasher<AppUser>();
+        var hasher = SecureHasher();
         user.PasswordHash = hasher.HashPassword(user, "StrongPass1");
         db.Users.Add(user);
         await db.SaveChangesAsync();
@@ -159,7 +179,10 @@ public sealed class AuthenticationTests
     };
 
     private static AuthController Controller(ApplicationDbContext db, IPasswordHasher<AppUser>? hasher = null) =>
-        new(db, hasher ?? new PasswordHasher<AppUser>(), TokenService());
+        new(db, hasher ?? SecureHasher(), TokenService());
+
+    private static PasswordHasher<AppUser> SecureHasher() => new(Options.Create(
+        new PasswordHasherOptions { IterationCount = 220_000 }));
 
     private static JwtTokenService TokenService() => new(Options.Create(new JwtOptions
     {

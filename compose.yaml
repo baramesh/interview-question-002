@@ -25,7 +25,7 @@ services:
       context: .
       dockerfile: src/api/Dockerfile
     environment:
-      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_ENVIRONMENT: Production
       ASPNETCORE_URLS: http://+:8080
       ConnectionStrings__DefaultConnection: Host=postgres;Port=5432;Database=${POSTGRES_DB:-interview_question_002};Username=${POSTGRES_USER:-interview_user};Password=${POSTGRES_PASSWORD:-local_only_change_me}
       Jwt__SigningKey: ${JWT_SIGNING_KEY:-local-development-only-signing-key-change-me-002}

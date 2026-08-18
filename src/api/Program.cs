@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.Net;
 using System.Text;
 using System.Threading.RateLimiting;
 using Example.InterviewQuestion002.Api.Data;
@@ -32,6 +33,7 @@ if (Encoding.UTF8.GetByteCount(jwtOptions.SigningKey) < 32)
     throw new InvalidOperationException("JWT signing key must be at least 32 bytes.");
 }
 builder.Services.Configure<JwtOptions>(builder.Configuration.GetRequiredSection(JwtOptions.SectionName));
+builder.Services.Configure<PasswordHasherOptions>(options => options.IterationCount = 220_000);
 builder.Services.AddSingleton<JwtTokenService>();
 builder.Services.AddScoped<IPasswordHasher<AppUser>, PasswordHasher<AppUser>>();
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -66,11 +68,20 @@ builder.Services.AddAuthorization();
 builder.Services.AddRateLimiter(options =>
 {
     options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
-    options.AddPolicy("auth-attempt", context => RateLimitPartition.GetFixedWindowLimiter(
-        context.Connection.RemoteIpAddress?.ToString() ?? "unknown",
+    options.AddPolicy("login-attempt", context => RateLimitPartition.GetFixedWindowLimiter(
+        ClientPartitionKey(context),
         _ => new FixedWindowRateLimiterOptions
         {
-            PermitLimit = 20,
+            PermitLimit = 10,
+            Window = TimeSpan.FromMinutes(1),
+            QueueLimit = 0,
+            AutoReplenishment = true
+        }));
+    options.AddPolicy("register-attempt", context => RateLimitPartition.GetFixedWindowLimiter(
+        ClientPartitionKey(context),
+        _ => new FixedWindowRateLimiterOptions
+        {
+            PermitLimit = 10,
             Window = TimeSpan.FromMinutes(1),
             QueueLimit = 0,
             AutoReplenishment = true
@@ -93,6 +104,11 @@ app.Use(async (context, next) =>
     context.Response.Headers.TryAdd("X-Frame-Options", "DENY");
     context.Response.Headers.TryAdd("Referrer-Policy", "no-referrer");
     context.Response.Headers.TryAdd("Permissions-Policy", "camera=(), microphone=(), geolocation=()");
+    if (context.Request.Path.StartsWithSegments("/api/auth"))
+    {
+        context.Response.Headers.CacheControl = "no-store";
+        context.Response.Headers.Pragma = "no-cache";
+    }
     await next();
 });
 
@@ -108,5 +124,13 @@ app.UseAuthorization();
 app.MapGet("/health", () => Results.Ok(new { status = "healthy" })).AllowAnonymous();
 app.MapControllers();
 app.Run();
+
+static string ClientPartitionKey(HttpContext context)
+{
+    var forwardedFor = context.Request.Headers["X-Forwarded-For"].ToString();
+    return IPAddress.TryParse(forwardedFor, out var forwardedAddress)
+        ? forwardedAddress.ToString()
+        : context.Connection.RemoteIpAddress?.ToString() ?? "unknown";
+}
 
 public partial class Program;

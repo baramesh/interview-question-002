@@ -129,9 +129,9 @@ npm audit
 
 Latest verified result:
 
-- xUnit: 15/15 passed
-- Angular Unit Test: 4/4 passed
-- Playwright Chromium: 18/18 passed with 18 screenshots
+- xUnit: 16/16 passed
+- Angular Unit Test: 5/5 passed
+- Playwright Chromium: 25/25 passed with 25 screenshots, including 13 OWASP security cases
 - Angular production build: passed
 - NuGet vulnerability scan and npm audit: no known vulnerabilities from the configured sources
 

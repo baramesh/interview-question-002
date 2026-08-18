@@ -42,6 +42,16 @@ describe('Authentication UI', () => {
     expect(fixture.componentInstance.form.hasError('passwordMismatch')).toBe(true);
   });
 
+  it('accepts a long passphrase without composition rules', () => {
+    const fixture = TestBed.createComponent(RegisterComponent);
+    fixture.componentInstance.form.setValue({
+      username: 'tester',
+      password: 'all lowercase passphrase',
+      confirmPassword: 'all lowercase passphrase',
+    });
+    expect(fixture.componentInstance.form.valid).toBe(true);
+  });
+
   it('stores the JWT returned by login', () => {
     const service = TestBed.inject(AuthService);
     service.login({ username: 'tester', password: 'StrongPass1' }).subscribe();

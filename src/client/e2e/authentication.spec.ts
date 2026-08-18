@@ -146,7 +146,7 @@ test('TC-AUTH2-VAL-003 ปฏิเสธ Username ซ้ำแบบไม่�
   await expect(page.getByTestId('register-button')).toBeEnabled();
 });
 
-test('TC-AUTH2-VAL-004 ปฏิเสธรหัสผ่านที่ไม่ผ่านกฎบนหน้าสมัคร', async ({ page }) => {
+test('TC-AUTH2-VAL-004 ปฏิเสธรหัสผ่านที่สั้นกว่าแปดตัวอักษร', async ({ page }) => {
   let registerRequests = 0;
   page.on('request', (request) => {
     if (request.method() === 'POST' && request.url().endsWith('/api/auth/register'))
@@ -154,12 +154,12 @@ test('TC-AUTH2-VAL-004 ปฏิเสธรหัสผ่านที่ไม
   });
   await page.goto('/register');
   await page.getByTestId('register-username').fill('weak.password');
-  await page.getByTestId('register-password').fill('weakpass');
-  await page.getByTestId('register-confirm-password').fill('weakpass');
+  await page.getByTestId('register-password').fill('short');
+  await page.getByTestId('register-confirm-password').fill('short');
 
   await page.getByTestId('register-button').click();
 
-  await expect(page.getByText('Use 8+ characters with upper, lower and number.')).toBeVisible();
+  await expect(page.getByText('Use at least 8 characters.')).toBeVisible();
   expect(registerRequests).toBe(0);
 });
 
@@ -212,6 +212,21 @@ test('SEC-AUTH2-006 ปฏิเสธ JWT ไม่ถูกต้องแล�
   await expect(page.getByText('JWT')).toHaveCount(0);
 });
 
+test('SEC-AUTH2-011 ปฏิเสธ JWT ที่ถูกดัดแปลง', async ({ request }) => {
+  const value = username('tampered-token');
+  await register(request, value);
+  const loginResponse = await request.post('/api/auth/login', {
+    data: { username: value, password: 'StrongPass1' },
+  });
+  const { accessToken } = (await loginResponse.json()) as { accessToken: string };
+  const lastCharacter = accessToken.at(-1);
+  const tampered = `${accessToken.slice(0, -1)}${lastCharacter === 'A' ? 'B' : 'A'}`;
+  const response = await request.get('/api/auth/me', {
+    headers: { Authorization: `Bearer ${tampered}` },
+  });
+  expect(response.status()).toBe(401);
+});
+
 test('SEC-AUTH2-003 ใช้ข้อความกลางเมื่อข้อมูลรับรองผิด', async ({ request }) => {
   const value = username('generic');
   await register(request, value);
@@ -234,6 +249,11 @@ test('SEC-AUTH2-004 ส่ง security headers ผ่าน Nginx', async ({ pag
   expect(response?.headers()['x-frame-options']).toBe('DENY');
   expect(response?.headers()['referrer-policy']).toBe('no-referrer');
   expect(response?.headers()['permissions-policy']).toContain('camera=()');
+});
+
+test('SEC-AUTH2-013 ไม่เปิดเผยรุ่นของ web server', async ({ page }) => {
+  const response = await page.goto('/login');
+  expect(response?.headers()['server']).toBe('nginx');
 });
 
 test('TC-AUTH2-RESP-001 ทุกหน้ารองรับ viewport มือถือ', async ({ page, request }) => {
@@ -272,13 +292,63 @@ test('TC-AUTH2-RESP-002 การ์ด Login อยู่กึ่งกลา�
   expect(Math.abs(alignment.cardCenter - alignment.contentCenter)).toBeLessThanOrEqual(1);
 });
 
+test('SEC-AUTH2-007 ป้องกัน SQL injection ที่ช่อง Username ของ Login', async ({ request }) => {
+  const response = await request.post('/api/auth/login', {
+    data: { username: "' OR 1=1 --", password: 'WrongPass1' },
+  });
+  expect(response.status()).toBe(401);
+  expect((await response.json()).title).toBe('Invalid username or password.');
+});
+
+test('SEC-AUTH2-008 ไม่อนุญาต CORS จาก origin ที่ไม่เชื่อถือ', async ({ request }) => {
+  const response = await request.fetch('/api/auth/login', {
+    method: 'OPTIONS',
+    headers: {
+      Origin: 'https://attacker.example',
+      'Access-Control-Request-Method': 'POST',
+    },
+  });
+  expect(response.headers()['access-control-allow-origin']).toBeUndefined();
+});
+
+test('SEC-AUTH2-009 ปฏิเสธ payload ที่เกินขนาดกำหนด', async ({ request }) => {
+  const oversized = 'a'.repeat(70 * 1024);
+  const response = await request.post('/api/auth/register', {
+    data: { username: 'oversized', password: oversized, confirmPassword: oversized },
+  });
+  expect(response.status()).toBe(413);
+});
+
+test('SEC-AUTH2-010 ไม่ cache ผลตอบกลับที่เกี่ยวกับการยืนยันตัวตน', async ({ request }) => {
+  const response = await request.post('/api/auth/login', {
+    data: { username: username('no-cache'), password: 'WrongPass1' },
+  });
+  expect(response.status()).toBe(401);
+  expect(response.headers()['cache-control']).toContain('no-store');
+  expect(response.headers()['pragma']).toBe('no-cache');
+});
+
 test('SEC-AUTH2-005 จำกัดอัตราคำขอเข้าสู่ระบบ', async ({ request }) => {
   const statuses: number[] = [];
-  for (let index = 0; index < 25; index += 1) {
+  for (let index = 0; index < 15; index += 1) {
     statuses.push(
       (
         await request.post('/api/auth/login', {
           data: { username: 'rate.test', password: 'WrongPass1' },
+        })
+      ).status(),
+    );
+  }
+  expect(statuses).toContain(429);
+});
+
+test('SEC-AUTH2-012 จำกัดอัตราคำขอสมัครสมาชิก', async ({ request }) => {
+  const statuses: number[] = [];
+  for (let index = 0; index < 15; index += 1) {
+    statuses.push(
+      (
+        await request.post('/api/auth/register', {
+          data: { username: 'x', password: 'short', confirmPassword: 'different' },
         })
       ).status(),
     );

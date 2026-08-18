@@ -12,11 +12,12 @@ type: qa-index
 - `unit-test-cases.md` — Unit Test ตามประเภท
 - `playwright-test-cases.md` — Browser Test พร้อม Test Step และผลคาดหวัง
 - `security-test-plan.md` — การจับคู่ OWASP กับการตรวจ
+- `owasp-test-result.md` — ผล OWASP แยกมาตรการที่ผ่าน ช่องว่าง และสิ่งที่อยู่นอก local test
 
 ## ผลล่าสุด
 
-- `unit-test-result.md` — xUnit 15/15 และ Angular 4/4
-- `playwright-test-result.md` — Playwright 18/18 พร้อมภาพ 18 ไฟล์
+- `unit-test-result.md` — xUnit 16/16 และ Angular 5/5
+- `playwright-test-result.md` — Playwright 25/25 พร้อมภาพ 25 ไฟล์
 - `verification-report-2026-08-18.md` — build, dependency scan, runtime, database และ visual QA
 - `traceability-auth2.md` — การจับคู่โจทย์กับ API/UI และการทดสอบ
 

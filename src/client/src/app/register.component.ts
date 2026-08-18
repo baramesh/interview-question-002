@@ -42,10 +42,10 @@ function passwordsMatch(control: AbstractControl): ValidationErrors | null {
           Create a username and password for your Example.com account.
         </p>
       </div>
-      <ul class="m-0 grid list-none gap-3 p-0 text-sm text-indigo-100">
-        <li>✓ At least 8 characters</li>
-        <li>✓ Uppercase and lowercase letters</li>
-        <li>✓ At least one number</li>
+      <ul class="m-0 grid list-disc gap-3 pl-5 text-sm text-indigo-100">
+        <li>At least 8 characters</li>
+        <li>Up to 128 characters</li>
+        <li>Spaces and symbols are allowed</li>
       </ul>
     </aside>
     <section class="p-6 sm:p-10">
@@ -94,7 +94,7 @@ function passwordsMatch(control: AbstractControl): ValidationErrors | null {
             data-testid="register-password"
           />
           @if (showError('password')) {
-            <mat-error>Use 8+ characters with upper, lower and number.</mat-error>
+            <mat-error>Use at least 8 characters.</mat-error>
           }
         </mat-form-field>
         <mat-form-field appearance="outline"
@@ -165,15 +165,7 @@ export class RegisterComponent {
             Validators.pattern(/^[A-Za-z0-9._-]+$/),
           ],
         ],
-        password: [
-          '',
-          [
-            Validators.required,
-            Validators.minLength(8),
-            Validators.maxLength(128),
-            Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/),
-          ],
-        ],
+        password: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(128)]],
         confirmPassword: ['', Validators.required],
       },
       { validators: passwordsMatch },

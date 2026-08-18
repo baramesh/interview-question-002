@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 
 namespace Example.InterviewQuestion002.Api.Controllers;
 
@@ -25,12 +26,13 @@ public sealed class AuthController(
         NormalizedUsername = "DUMMY",
         PasswordHash = string.Empty
     };
-    private static readonly string DummyHash = new PasswordHasher<AppUser>()
+    private static readonly string DummyHash = new PasswordHasher<AppUser>(Options.Create(
+        new PasswordHasherOptions { IterationCount = 220_000 }))
         .HashPassword(DummyUser, "NeverValid1");
 
     [HttpPost("register")]
     [AllowAnonymous]
-    [EnableRateLimiting("auth-attempt")]
+    [EnableRateLimiting("register-attempt")]
     public async Task<ActionResult> Register(RegisterRequest request, CancellationToken cancellationToken)
     {
         var username = request.Username.Trim();
@@ -73,7 +75,7 @@ public sealed class AuthController(
 
     [HttpPost("login")]
     [AllowAnonymous]
-    [EnableRateLimiting("auth-attempt")]
+    [EnableRateLimiting("login-attempt")]
     public async Task<ActionResult<LoginToken>> Login(LoginRequest request, CancellationToken cancellationToken)
     {
         var normalized = CredentialRules.NormalizeUsername(request.Username);
@@ -92,6 +94,12 @@ public sealed class AuthController(
                 Status = StatusCodes.Status401Unauthorized,
                 Title = InvalidCredentialsMessage
             });
+        }
+
+        if (result == PasswordVerificationResult.SuccessRehashNeeded)
+        {
+            user.PasswordHash = passwordHasher.HashPassword(user, request.Password);
+            await dbContext.SaveChangesAsync(cancellationToken);
         }
 
         return Ok(tokenService.Create(user));
