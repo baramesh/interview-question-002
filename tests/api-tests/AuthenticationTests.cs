@@ -13,7 +13,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 
-namespace InterviewQuestion002.Api.Tests;
+namespace Example.InterviewQuestion002.Api.Tests;
 
 public sealed class AuthenticationTests
 {
